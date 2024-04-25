@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-public class test extends loginHelper  {
+public class test extends LoginHelper {
 
     protected WebDriver driver;
 
