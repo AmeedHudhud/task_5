@@ -11,69 +11,63 @@ import java.time.Duration;
 public class DiscoverJobsHelper extends LoginHelper {
 
     public void clickButton(String locator, WebDriver driver, boolean xpath) throws InterruptedException {
-
+        Thread.sleep(1000);
         if(xpath){
-//            "//p[text()='Show remote jobs']"
-//            Thread.sleep(2000);
             String buttonLocator = "//*[text()='" + locator + "']";
-//        driver.findElement(By.xpath(buttonLocator)).click();
-//      "//*[text()='View Job' and @data-id='job0-first-CTA']"
             new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(buttonLocator))).click();
-//      driver.findElement(By.xpath("//*[text()='" + Locator + "']")).click();
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.xpath(buttonLocator)));
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.elementToBeClickable(By.xpath(buttonLocator)));
+            driver.switchTo().activeElement();
+            driver.findElement(By.xpath(buttonLocator)).click();
         }else{
             new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locator))).click();
+                    .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("["+locator+"]"))).click();
         }
-//
     }
 
     public void enterFieldValue(String locator, String text, WebDriver driver) throws InterruptedException {
-//        Thread.sleep(2000);
-
+        Thread.sleep(500);
         new WebDriverWait(driver, Duration.ofSeconds(10))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(locator))).sendKeys(text);
     }
 
     public void selectFromMenu(String locator, String data,WebDriver driver) throws InterruptedException {
-//        new WebDriverWait(driver, Duration.ofSeconds(10))
-//                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("placeholder=\"Search company\""))).click();
-//        Thread.sleep(2000);
-        clickButton(locator,driver,true);
-//        Thread.sleep(2000);
+        Thread.sleep(500);
+        clickButton(locator,driver,false);
         clickButton(data,driver,true);
-
-//        driver.findElement(By.name(data)).click();
     }
 
-//    public void verifyJavaPresence(WebDriver driver,String text) {
-//        String pageSource = driver.getPageSource();
-//        Assert.assertTrue(pageSource.contains(text));
-//    }
 
-    public void verifyJavaPresence(String[] information, WebDriver driver) {
-        String pageSource = driver.getPageSource();
-        boolean isTextPresent = false;
-        for (String data : information) {
-            if (!pageSource.contains(data)) {
-                Assert.assertFalse(false);
-//                isTextPresent = true;
-//                break;
+    public void verifyJavaPresence(String[] information, WebDriver driver, boolean exist) throws InterruptedException {
+        Thread.sleep(1000);
+        if(exist){
+            String pageSource = driver.getPageSource();
+            for (String data : information) {
+                if (!pageSource.contains(data)) {
+                    Assert.fail(data);
+                }
+            }
+        }else{
+            String pageSource = driver.getPageSource();
+            for (String data : information) {
+                if (pageSource.contains(data)) {
+                    Assert.fail(data);
+                }
             }
         }
-//        Assert.assertTrue(isTextPresent);
+
     }
 
     public void verifyExperience(String range) throws InterruptedException {
-//        Thread.sleep(2000);
+//        Thread.sleep(100);
         String[] splitRange = range.split(" - ");
         String minString = splitRange[0];
         String maxString = splitRange[1];
         int min = Integer.parseInt(minString.replaceAll("\\D", ""));
         int max = Integer.parseInt(maxString.replaceAll("\\D", ""));
-//        System.out.println(min + "   " + max);
         if (min >= 1 && max <= 4) {
-            Assert.fail("Experience range does not meet the criteria");
+            Assert.fail("error");
         }
     }
 
